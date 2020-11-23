@@ -1,0 +1,34 @@
+<!DOCTYPE hibernate-configuration PUBLIC
+	"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+	"http://ww.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+
+<hibernate-configuration>
+
+	<session-factory>
+
+		<property name="hibernate.connection.username">postgres</property>
+		<property name="hibernate.connection.password">Barata20</property>
+		<property name="hibernate.connection.url">/database-1.c7nfwfj2cjqm.us-east-2.rds.amazonaws.com</property>
+
+		<property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
+		<property name="hibernate.connection.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
+		<property name="hibernate.show_sql">false</property>
+		<property name="hibernate.format_sql">false</property>
+
+
+		<property name="hibernate.connection.pool_size">10</property>
+
+		<property name="hibernate.hbm2ddl.auto">create</property>
+
+
+		<mapping class="com.revature.model.User" />
+		<mapping class="com.revature.model.Reimbursement" />
+		<mapping class="com.revature.model.ReimStatus" />
+		<mapping class="com.revature.model.ReimType" />
+		<mapping class="com.revature.model.UserRoles" />
+
+
+	</session-factory>
+
+</hibernate-configuration>
