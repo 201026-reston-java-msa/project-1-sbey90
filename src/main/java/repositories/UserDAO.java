@@ -34,7 +34,7 @@ public class UserDAO {
 		tx.commit();
 	}
 
-	public List<User> selectById(int id) {
+	public static List<User> selectById(int id) {  // changed to static 
 		Session session = HibernateUtil.getSession();
 		User user = session.get(User.class, id);
 

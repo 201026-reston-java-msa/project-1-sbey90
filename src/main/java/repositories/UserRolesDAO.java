@@ -14,7 +14,7 @@ public class UserRolesDAO {
 		super();
 	}
 
-	public void insert(UserRoles role) {
+	public static void insert(UserRoles role) {  // changed to static
 		Session session = HibernateUtil.getSession();
 		Transaction tx = session.beginTransaction();
 
@@ -22,7 +22,7 @@ public class UserRolesDAO {
 		tx.commit();
 	}
 
-	public void update(UserRoles role) {
+	public static void update(UserRoles role) {  // changed to static
 		Session session = HibernateUtil.getSession();
 		Transaction tx = session.beginTransaction();
 
@@ -30,14 +30,14 @@ public class UserRolesDAO {
 		tx.commit();
 	}
 
-	public List<UserRoles> selectAll() {
+	public static List<UserRoles> selectAll() {  // changed to static
 		Session session = HibernateUtil.getSession();
 		List<UserRoles> roleList = session.createQuery("from UserRoles", UserRoles.class).list();
 
 		return roleList;
 	}
 
-	public List<UserRoles> selectById(int id) {
+	public static List<UserRoles> selectById(int id) {  // changed to static
 		Session session = HibernateUtil.getSession();
 		UserRoles roleList = session.get(UserRoles.class, id);
 

@@ -14,7 +14,7 @@ public class ReimTypeDAO {
 		super();
 	}
 
-	public void insert(ReimType type) {
+	public static void insert(ReimType type) { // changed to static
 		Session session = HibernateUtil.getSession();
 		Transaction tx = session.beginTransaction();
 
@@ -22,7 +22,7 @@ public class ReimTypeDAO {
 		tx.commit();
 	}
 
-	public void update(ReimType type) {
+	public static void update(ReimType type) {  // changed to static
 		Session session = HibernateUtil.getSession();
 		Transaction tx = session.beginTransaction();
 
@@ -30,7 +30,7 @@ public class ReimTypeDAO {
 		tx.commit();
 	}
 
-	public List<ReimType> selectById(int id) {
+	public static List<ReimType> selectById(int id) {  // changed to static
 		Session session = HibernateUtil.getSession();
 		ReimType type = session.get(ReimType.class, id);
 
@@ -39,7 +39,7 @@ public class ReimTypeDAO {
 		return typeList;
 	}
 
-	public List<ReimType> selectAll() {
+	public static List<ReimType> selectAll() {  // changed to static
 		Session session = HibernateUtil.getSession();
 
 		List<ReimType> typeList = session.createQuery("from ReimType", ReimType.class).list();
