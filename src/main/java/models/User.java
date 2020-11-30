@@ -27,26 +27,26 @@ public class User {
 	private int userId;
 	
 	
-	@Column(name="first_name")
+	@Column(name="first_name", nullable=false)
 	private String firstName;
 	
 	
-	@Column(name="last_name")
+	@Column(name="last_name", nullable=false)
 	private String lastName;
 	
 	
-	@Column(name="user_name")
+	@Column(name="user_name", nullable=false)
 	private String username;
 	
 	
-	@Column(name="pass_word")
+	@Column(name="pass_word", nullable=false)
 	private String password;
 	
 	
-	@Column(name="email")
+	@Column(name="email", nullable=false)
 	private String email;
 	
-	@Column(name="user_role")
+	@Column(name="user_role_FK", nullable=false)
 	private String role;
 	
 	

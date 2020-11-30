@@ -9,24 +9,28 @@
 
 		<property name="hibernate.connection.username">postgres</property>
 		<property name="hibernate.connection.password">Barata20</property>
-		<property name="hibernate.connection.url">/database-1.c7nfwfj2cjqm.us-east-2.rds.amazonaws.com</property>
+		<property name="hibernate.connection.url">jdbc:postgresql://database-2.c7nfwfj2cjqm.us-east-2.rds.amazonaws.com:5432/postgres</property>
 
 		<property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
+
+		<property name="hibernate.connection.pool_size">10</property>
 		<property name="hibernate.connection.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
 		<property name="hibernate.show_sql">false</property>
 		<property name="hibernate.format_sql">false</property>
+		<!-- Changed to true above per examples online -->
 
-
-		<property name="hibernate.connection.pool_size">10</property>
-
+		<!-- added this below. - Enables Hibernate's automatic session context 
+			management -->
+		<property name="current_session_context_class">thread</property>
 		<property name="hibernate.hbm2ddl.auto">create</property>
 
 
-		<mapping class="com.revature.model.User" />
-		<mapping class="com.revature.model.Reimbursement" />
-		<mapping class="com.revature.model.ReimStatus" />
-		<mapping class="com.revature.model.ReimType" />
-		<mapping class="com.revature.model.UserRoles" />
+		<!-- Changed property here - TESTING -->
+		<mapping class="models.User" />
+		<mapping class="models.Reimbursement" />
+		<mapping class="models.ReimStatus" />
+		<mapping class="models.ReimType" />
+		<mapping class="models.UserRoles" />
 
 
 	</session-factory>

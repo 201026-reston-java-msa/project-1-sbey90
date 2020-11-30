@@ -3,6 +3,7 @@ package repositories;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -12,18 +13,31 @@ import utils.HibernateUtil;
 
 public class UserDAO {
 	
+	private static Session session = HibernateUtil.getSession();
+	
 	private static Logger log = Logger.getLogger(UserDAO.class);
 
 	public UserDAO() {
 		super();
 	}
 
-	public static void insert(User user) {  // Changed to static -- testing
-		Session session = HibernateUtil.getSession();
-		Transaction tx = session.beginTransaction();
-
-		session.save(user);
-		tx.commit();
+	public static void insert(User user) {  // Changed to static and return type (was void) -- testing
+		session.beginTransaction();
+		
+		try {
+			session.save(user);
+		} catch (HibernateException e) {
+			log.warn("Unable to insert user into the database.", e);
+		}
+		
+		session.getTransaction().commit();
+//		Session session = HibernateUtil.getSession();
+//		Transaction tx = session.beginTransaction();
+//
+//		session.save(user);
+//		tx.commit();
+			
+		
 	}
 
 	public static void update(User user) {   // Changed to static -- testing
@@ -32,6 +46,7 @@ public class UserDAO {
 
 		session.update(user);
 		tx.commit();
+		
 	}
 
 	public static List<User> selectById(int id) {  // changed to static 

@@ -10,24 +10,26 @@ import modelDTO.UserDTO;
 import models.User;
 import repositories.UserDAO;
 
-public class UserService {
+public class UserService extends UserDAO {  // added extends
 
 	private static Logger log = Logger.getLogger(UserService.class);
 
-	public void insertUser(User user) {
+	public static User insertUser(User user) {  
 
 		try {
 			log.info("Attempting to insert a user into the Database.");
-			UserDAO.insert(user);
+//			UserDAO.
+			insert(user);
 
 			log.info("Successfully inserted new user into the Database!");
-
+			return user;
 		} catch (HibernateException e) {
 			log.warn("Unable to insert a user into the Database.", e);
+			return null;
 		}
 	}
 
-	public void updateUser(User user, int id) {
+	public static void updateUser(User user, int id) {
 
 		try {
 			log.info("Attempting to locate the user by id in the Database.");
