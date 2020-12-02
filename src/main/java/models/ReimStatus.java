@@ -9,26 +9,32 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="reim-status")
+@Table(name="reim_status")  //Testing as Hibernate is recreating the same tables
 public class ReimStatus {
 	
 	private static final long serialUID = 1L;
 	
+	
+//	@Id
+//	@JoinColumn(name="reim_id_FK", insertable=false, updatable=false)
+//	private int reimId;
+	
 	@Id
 	@Column(name="status_id")
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int statusId;
 	
 	@Column(name="status")
 	private String status;
 	
 	
-	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY)
-	List<Reimbursement> reimbursements;
+//	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY)
+//	List<Reimbursement> reimbursements;
 	
 	
 	

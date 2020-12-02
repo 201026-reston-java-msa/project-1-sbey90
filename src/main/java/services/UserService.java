@@ -18,7 +18,7 @@ public class UserService extends UserDAO {  // added extends
 
 		try {
 			log.info("Attempting to insert a user into the Database.");
-//			UserDAO.
+
 			insert(user);
 
 			log.info("Successfully inserted new user into the Database!");
@@ -67,24 +67,30 @@ public class UserService extends UserDAO {  // added extends
 				return u;
 			}
 			log.info("User has been returned from the Database.");
+			log.info("User is null.");
+			
 		}
-		log.info("User is null.");
+		
 		return null;
 
 	}
 
-	public static User confirmLogin(String username, String password) {
-
-		User user = selectByUsername(username);
-		if (user == null) {
+	public static UserDTO confirmLogin(String username, String password) {
+	
+		if(username == null || password == null) {
 			return null;
 		}
-
-		if (user.getPassword().equals(password)) {
-			log.info("User's login has been confirmed.");
-			return user;
-		}
-		return null;
+		
+		User user = selectByUsername(username);
+		UserDTO dto = new UserDTO();
+		
+		if(user != null) {
+			
+			dto = convertUsers(user);
+			return dto;
+		} 
+		return dto;
+		
 	}
 
 	// Convert Method to convert users into DTO instances
@@ -95,7 +101,13 @@ public class UserService extends UserDAO {  // added extends
 
 	}
 
-	// You may need a registration method that will attach to a registration .html
-	// form -- will also need a registration servlet
+	
+	public static User convertFromDTO(UserDTO uDTO) {
+		
+		return new User(uDTO.getUserId(), uDTO.getFirstName(), uDTO.getLastName(), uDTO.getUsername(), uDTO.getPassword(),
+				uDTO.getEmail(), uDTO.getRole());
+	}
+
+	
 
 }

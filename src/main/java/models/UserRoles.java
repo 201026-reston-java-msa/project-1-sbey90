@@ -9,27 +9,30 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="user_roles")
+@Table(name="user_roles")  //Testing as Hibernate is recreating the same tables
 public class UserRoles {
 	
 	private static final long serialUid = 1L;
 	
+
+	
 	@Id
 	@Column(name="user_role_id")
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.IDENTITY) // WAS AUTO
 	private int userRoleId;
 	
-	@Column(name="user_role")
+
+	@Column(name="role")
 	private String userRole;
 	
 	
-	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY)
-	List<User> userList;
-	
+
 	
 	public UserRoles () {
 		super();

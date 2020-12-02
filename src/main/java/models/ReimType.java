@@ -9,28 +9,29 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
 @Table(name="reim_type")
-
 public class ReimType {
 	
 	private static final long serialUID = 1l;
 	
 	
+		
 		@Id
 		@Column(name="type_id")
-		@GeneratedValue(strategy=GenerationType.AUTO)
+		@GeneratedValue(strategy=GenerationType.IDENTITY)
 		private int typeId;
 		
-		@Column(name="reim_type")
+		@Column(name="type")
 		private String reimType;
 		
 		
-		@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY)
-		List<Reimbursement> reimbursements;
+//		@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY)
+//		List<Reimbursement> reimbursements;
 		
 		
 		

@@ -6,6 +6,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -14,9 +15,12 @@ import org.apache.log4j.Logger;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import modelDTO.ReimbursementDTO;
 import modelDTO.UserDTO;
 import models.LoginTemplate;
+import models.Reimbursement;
 import models.User;
+import services.ReimbursementService;
 import services.UserService;
 
 public class RequestHelper {
@@ -47,7 +51,7 @@ public class RequestHelper {
 
 		log.info("User is attempting to login with " + username);
 
-		User u = UserService.confirmLogin(username, password);
+		UserDTO u = UserService.confirmLogin(username, password);
 
 		if (u != null) {
 			HttpSession session = req.getSession();
@@ -55,14 +59,18 @@ public class RequestHelper {
 
 			PrintWriter pw = res.getWriter();
 			res.setContentType("application/json");
-
-			UserDTO uDTO = UserService.convertUsers(u);
-			pw.println(om.writeValueAsString(uDTO));
+			
+			User user = new User();
+			UserDTO uDTO = UserService.convertUsers(user);
+			
+				
+			pw.println(om.writeValueAsString(uDTO));  //.. NOT CURRENTLY USING THIS CLASS
 
 			log.info(username + " has successfully logged in.");
 		} else {
 			res.setContentType("application/json");
 			res.setStatus(204);
+			log.warn("unable to process request.");
 		}
 
 		// Will need to create and call a UserService method to check if the username
@@ -80,6 +88,22 @@ public class RequestHelper {
 		}
 		String json = om.writeValueAsString(allDTOUsers);
 
+		PrintWriter pw = res.getWriter();
+		pw.println(json);
+	}
+	
+	public static void processReimbursements(HttpServletRequest req, HttpServletResponse res) throws IOException {
+		res.setContentType("application/json");
+		
+		List<Reimbursement> reimList = new ArrayList<Reimbursement>();
+		List<ReimbursementDTO> allDTOReims = new ArrayList<ReimbursementDTO>();
+		
+		for(Reimbursement r : reimList) {
+			allDTOReims.add(ReimbursementService.convertToDTO(r));
+		}
+		
+		String json = om.writeValueAsString(allDTOReims);
+		
 		PrintWriter pw = res.getWriter();
 		pw.println(json);
 	}

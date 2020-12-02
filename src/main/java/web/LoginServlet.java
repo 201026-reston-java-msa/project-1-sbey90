@@ -15,6 +15,7 @@ import org.apache.log4j.Logger;
 //import com.revature.util.HTMLTemplate;
 
 import jdk.internal.org.jline.utils.Log;
+import modelDTO.UserDTO;
 import models.User;
 import services.UserService;
 import utils.HTMLTemplate;
@@ -63,21 +64,22 @@ public class LoginServlet extends HttpServlet {
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
 		
-		Log.info("User attempted to login in with:" + username);
-		User u = UserService.confirmLogin(username, password);
+		
+		UserDTO u = UserService.confirmLogin(username, password);
+//		Log.info("User attempted to login in with:" + username);
 		
 		if(u != null) {
 			HttpSession session = request.getSession();
 			session.setAttribute("username", username);  // Must set attribute here
 			
-			RequestDispatcher rd = request.getRequestDispatcher("index.html");
+			RequestDispatcher rd = request.getRequestDispatcher("manProfile.html");
 			
 			rd.forward(request, response);
 			Log.info(username + " has successfully logged in.");
 		
 		} 
 		else {
-			Log.warn(username + " is not on file.");
+//			Log.warn(username + " is not on file.");
 			PrintWriter pw = HTMLTemplate.getHtmlWriter(response); // producing the serialized version of our home.html page to the user
 			log.info(username + "has failed to log in.");
 			pw.println("<h3 style='color: red'>Denied</h3>");

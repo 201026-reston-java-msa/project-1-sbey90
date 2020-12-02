@@ -2,6 +2,8 @@ package web;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Enumeration;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -13,6 +15,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 
 import models.User;
+import models.UserRoles;
 import services.UserService;
 import utils.HTMLTemplate;
 
@@ -38,13 +41,19 @@ public class RegistrationServlet extends HttpServlet {
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
 		String email = request.getParameter("email");
-		String role = request.getParameter("role");
+		UserRoles role = (UserRoles) request.getAttribute("role");  // try
+		
+		// Removing list and implementing types
+//		List<UserRoles> role = (List<UserRoles>) request.getAttributeNames();  // can try
+//		String role = request.getParameter("role");
 		
 		log.info("Attempting to insert user information");
 		
-		User u = new User(firstName, lastName, username, password, email, role);
+		User u = new User(firstName, lastName, username, password, email, role);  // userRole
+		
+		UserService service = new UserService();  // TESTING 
  
-		u = UserService.insertUser(u);  // CHECK - tried to move between lines 55 & 56 - wanted a SupressWarnings tag
+		u = service.insertUser(u);  // CHECK - tried to move between lines 55 & 56 - wanted a SupressWarnings tag
 		
 		if(u != null) {
 			HttpSession session = request.getSession();  // This sets the attributes of the user's session 

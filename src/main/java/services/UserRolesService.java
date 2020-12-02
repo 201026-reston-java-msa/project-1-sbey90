@@ -20,7 +20,7 @@ public class UserRolesService {
 		try {
 			log.info("Attempting to insert Manager into the Database.");
 			UserRolesDAO.insert(role);
-			u.setRole("Manager");
+			
 
 			log.info("Successfully inserted Manager into the Database.");
 		} catch (HibernateException e) {
@@ -33,7 +33,7 @@ public class UserRolesService {
 		try {
 			log.info("Attempting to insert Employee into the Database.");
 			UserRolesDAO.insert(role);
-			u.setRole("Employee");
+			
 
 			log.info("Successfully inserted Employee into the Database.");
 		} catch (HibernateException e) {

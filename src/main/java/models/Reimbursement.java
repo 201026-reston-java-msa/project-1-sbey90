@@ -3,6 +3,7 @@ package models;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -13,87 +14,104 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-
 @Entity
-@Table(name="reimbursements")
-public class Reimbursement implements Serializable{
-	
-	private static final long serialVersionUID = 1L;
-	
-	@Id
-	@Column(name="reim_id")
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	private int reimb_id;
-	
-	@Column(name="author", nullable=false)
-	private String author;
-	
-	@Column(name="resolver")
-	private String resolver;
-	
-	@Column(name="status", nullable=false)
-	private boolean status;
-	
-	@Column(name="amount")
-	private int amount;
-	
-	@Column(name="description")
-	private String descrip;
-	
-	@Column(name="time")
-	private LocalDateTime timeStamp;
-	
-	
-	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY)
-	@JoinColumn(name="reim_status_FK")
-	private List<ReimStatus> statusList;
-	
-	
-	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY)
-	@JoinColumn(name="reim_type_FK")
-	private List<ReimType> typeList;
-	
-	
-	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY)
-	@JoinColumn(name="users_FK")
-	List<User> userList;
-	
-	
-	public Reimbursement() {
-		super();
-	}
+@Table(name = "reimbursements")
+public class Reimbursement implements Serializable {
 
-	public Reimbursement(int reimb_id,String author, String resolver, boolean status, LocalDateTime timeStamp, int amount, String descrip) {
+	private static final long serialVersionUID = 1L;
+
+	@Id
+	@Column(name = "reim_id") // , insertable=false, updatable=false
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int reimb_id;
+
+
+	@ManyToOne(cascade = CascadeType.ALL) // ,targetEntity=User.class
+	@JoinColumn(name = "author") // , nullable=false
+	private User author;
+
+	@ManyToOne(cascade = CascadeType.ALL) // ,targetEntity=User.class
+	@JoinColumn(name = "resolver", insertable = false, updatable = false)
+	private User resolver;
+
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JoinColumn(name = "type", insertable = false, updatable = false) // was type_id
+	private ReimType type;
+
+
+
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY) // OVER HERE
+	@JoinColumn(name = "status", insertable = false, updatable = false)
+	private ReimStatus status;
+
+	@Column(name = "amount")
+	private String amount;
+
+	@Column(name = "description")
+	private String descrip;
+
+	@Column(name = "time")
+	private LocalDateTime time;
+
+	public Reimbursement(int reimb_id, User author, User resolver, ReimType type, ReimStatus status, String amount,
+			String descrip, LocalDateTime time) {
 		super();
 		this.reimb_id = reimb_id;
 		this.author = author;
 		this.resolver = resolver;
+		this.type = type;
 		this.status = status;
-		this.timeStamp = timeStamp;
 		this.amount = amount;
 		this.descrip = descrip;
+		this.time = time;
 	}
 
-	
-	
+	public Reimbursement(User author, User resolver, ReimType type, ReimStatus status, String amount, String descrip,
+			LocalDateTime time) {
+		super();
+		this.author = author;
+		this.resolver = resolver;
+		this.type = type;
+		this.status = status;
+		this.amount = amount;
+		this.descrip = descrip;
+		this.time = time;
+	}
+
+	public Reimbursement(User author, User resolver, ReimType type, ReimStatus status, String amount, String descrip) {
+		super();
+		this.author = author;
+		this.resolver = resolver;
+		this.type = type;
+		this.status = status;
+		this.amount = amount;
+		this.descrip = descrip;
+		this.time = time;
+	}
+
+	public Reimbursement() {
+		super();
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + amount;
+		result = prime * result + ((amount == null) ? 0 : amount.hashCode());
 		result = prime * result + ((author == null) ? 0 : author.hashCode());
 		result = prime * result + ((descrip == null) ? 0 : descrip.hashCode());
 		result = prime * result + reimb_id;
 		result = prime * result + ((resolver == null) ? 0 : resolver.hashCode());
-		result = prime * result + (status ? 1231 : 1237);
-		result = prime * result + ((timeStamp == null) ? 0 : timeStamp.hashCode());
+		result = prime * result + ((status == null) ? 0 : status.hashCode());
+		result = prime * result + ((time == null) ? 0 : time.hashCode());
+		result = prime * result + ((type == null) ? 0 : type.hashCode());
 		return result;
 	}
-
-	
 
 	@Override
 	public boolean equals(Object obj) {
@@ -104,7 +122,10 @@ public class Reimbursement implements Serializable{
 		if (getClass() != obj.getClass())
 			return false;
 		Reimbursement other = (Reimbursement) obj;
-		if (amount != other.amount)
+		if (amount == null) {
+			if (other.amount != null)
+				return false;
+		} else if (!amount.equals(other.amount))
 			return false;
 		if (author == null) {
 			if (other.author != null)
@@ -123,23 +144,33 @@ public class Reimbursement implements Serializable{
 				return false;
 		} else if (!resolver.equals(other.resolver))
 			return false;
-		if (status != other.status)
-			return false;
-		if (timeStamp == null) {
-			if (other.timeStamp != null)
+		if (status == null) {
+			if (other.status != null)
 				return false;
-		} else if (!timeStamp.equals(other.timeStamp))
+		} else if (!status.equals(other.status))
+			return false;
+		if (time == null) {
+			if (other.time != null)
+				return false;
+		} else if (!time.equals(other.time))
+			return false;
+		if (type == null) {
+			if (other.type != null)
+				return false;
+		} else if (!type.equals(other.type))
 			return false;
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "Reimbursement [reimb_id=" + reimb_id + ", author=" + author + ", resolver="
-				+ resolver + ", status=" + status + "]";
+		return "Reimbursement [reimb_id=" + reimb_id + ", author=" + author + ", resolver=" + resolver + ", type="
+				+ type + ", status=" + status + ", amount=" + amount + ", descrip=" + descrip + ", time=" + time + "]";
 	}
-	
-	
+
+	public void setTime(LocalDateTime time) {
+		this.time = time;
+	}
 
 	public String getDescrip() {
 		return descrip;
@@ -149,19 +180,19 @@ public class Reimbursement implements Serializable{
 		this.descrip = descrip;
 	}
 
-	public LocalDateTime getTimeStamp() {
-		return timeStamp;
+	public LocalDateTime getTime() {
+		return time;
 	}
 
-	public void setTimeStamp(LocalDateTime timeStamp) {
-		this.timeStamp = timeStamp;
+	public void setTimeStamp(LocalDateTime time) {
+		this.time = time;
 	}
 
-	public int getAmount() {
+	public String getAmount() {
 		return amount;
 	}
 
-	public void setAmount(int amount) {
+	public void setAmount(String amount) {
 		this.amount = amount;
 	}
 
@@ -173,35 +204,40 @@ public class Reimbursement implements Serializable{
 		this.reimb_id = reimb_id;
 	}
 
-
-	public String getAuthor() {
+	public User getAuthor() {
 		return author;
 	}
 
-	public void setAuthor(String author) {
+	public void setAuthor(User author) {
 		this.author = author;
 	}
 
-	public String getResolver() {
+	public User getResolver() {
 		return resolver;
 	}
 
-	public void setResolver(String resolver) {
+	public void setResolver(User resolver) {
 		this.resolver = resolver;
 	}
 
-	public boolean isStatus() {
+	public ReimType getType() {
+		return type;
+	}
+
+	public void setType(ReimType type) {
+		this.type = type;
+	}
+
+	public ReimStatus getStatus() {
 		return status;
 	}
 
-	public void setStatus(boolean status) {
+	public void setStatus(ReimStatus status) {
 		this.status = status;
 	}
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
-	
-	
 
 }

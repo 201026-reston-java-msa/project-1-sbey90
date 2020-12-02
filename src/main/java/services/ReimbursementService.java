@@ -11,18 +11,18 @@ import models.ReimStatus;
 import models.Reimbursement;
 import repositories.ReimbursementDAO;
 
-public class ReimbursementService {
+public class ReimbursementService extends ReimbursementDAO {
 	
 	private static Logger log = Logger.getLogger(ReimStatus.class);
 
 	
 	// Need to be able to submit a reimbursement  -- How to set status on pending request?
-		public void submitReimbursementRequest(Reimbursement r, ReimStatus status) {
+		public void submitReimbursementRequest(Reimbursement r, String status) {  //Didn't work
 			
 			try {
 				log.info("Attempting to submit reimbursement");
-				ReimbursementDAO.insert(r);
-				status.setStatus("pending"); // should set status to pending upon insertion of the request
+				insert(r);
+				status = "pending"; // should set status to pending upon insertion of the request
 				
 				log.info("Reimbursement has successfully been submitted.");
 				
@@ -98,14 +98,25 @@ public class ReimbursementService {
 			}
 		}
 
-	public ReimbursementDTO convertToDTO(Reimbursement r) {
+	public static ReimbursementDTO convertToDTO(Reimbursement r) {
 
 		List<Reimbursement> allReims = new ArrayList<Reimbursement>();
 
-		return new ReimbursementDTO(r.getReimb_id(), r.getAuthor(), r.getResolver(), r.isStatus(), r.getDescrip(),
+		return new ReimbursementDTO(r.getAuthor(), r.getResolver(), r.getType(), r.getAmount(), 
+									r.getDescrip(), r.getTime().toString());
+
+	}
+	
+	/*
+	 * public ReimbursementDTO convertToDTO(Reimbursement r) {
+
+		List<Reimbursement> allReims = new ArrayList<Reimbursement>();
+
+		return new ReimbursementDTO(r.getReimb_id(), r.getAuthor(), r.getResolver(), r.getType(), r.getStatus(), r.getDescrip(),
 				r.getAmount(), r.getTimeStamp().toString());
 
 	}
+	 */
 
 	// Will need to include a search fields within the Reimbursement html page/
 	// Manager html page to search for reimbursements
